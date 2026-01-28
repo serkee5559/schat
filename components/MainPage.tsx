@@ -28,7 +28,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onLogout, userName }) => {
         console.log("현재 채팅을 불러오는 유저 ID:", storedUserId);
 
         try {
-            const response = await fetch(`http://localhost:8080/api/chat/history/${storedUserId}`);
+            const response = await fetch(`${API_BASE_URL}/api/chat/history/${storedUserId}`);
             if (response.ok) {
                 const data = await response.json();
                 setChatHistory(data);
@@ -48,7 +48,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onLogout, userName }) => {
             setIsSidebarOpen(false);
             setCurrentSessionId(history.id);
 
-            const response = await fetch(`http://localhost:8080/api/chat/messages/${history.id}`);
+            const response = await fetch(`${API_BASE_URL}/api/chat/messages/${history.id}`);
             if (response.ok) {
                 const fullMessages = await response.json();
                 const formattedMessages = fullMessages.map((msg: any) => ({
@@ -113,7 +113,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onLogout, userName }) => {
             let hId = currentSessionId;
 
             if (!hId) {
-                const histRes = await fetch('http://localhost:8080/api/chat/save', {
+                const histRes = await fetch(`${API_BASE_URL}/api/chat/save`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -129,13 +129,13 @@ export const MainPage: React.FC<MainPageProps> = ({ onLogout, userName }) => {
             }
 
             // 개별 메시지 저장
-            await fetch('http://localhost:8080/api/chat/message/save', {
+            await fetch(`${API_BASE_URL}/api/chat/message/save`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ historyId: hId, role: 'user', content: text })
             });
 
-            await fetch('http://localhost:8080/api/chat/message/save', {
+            await fetch(`${API_BASE_URL}/api/chat/message/save`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ historyId: hId, role: 'assistant', content: rawResponse })

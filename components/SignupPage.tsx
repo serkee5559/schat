@@ -27,7 +27,7 @@ export const SignupPage: React.FC = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:8080/api/signup', {
+            const response = await fetch(`${API_BASE_URL}/api/signup`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

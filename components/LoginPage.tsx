@@ -23,7 +23,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8080/api/login', {
+      const response = await fetch(`${API_BASE_URL}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId, password }),
@@ -62,7 +62,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     const guestPw = '1234';  // DB에 저장된 게스트용 비밀번호
 
     try {
-      const response = await fetch('http://localhost:8080/api/login', {
+      const response = await fetch(`${API_BASE_URL}/api/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: guestId, password: guestPw }),
