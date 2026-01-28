@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { User, Mail, ArrowLeft, Star, Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../constants';
 
 export const FindIdPage: React.FC = () => {
     const navigate = useNavigate();
@@ -13,7 +14,7 @@ export const FindIdPage: React.FC = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch('http://localhost:8080/api/find-id', {
+            const response = await fetch(`${API_BASE_URL}/api/find-id`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userName: name, email: email }),
