@@ -186,4 +186,4 @@ export const MainPage: React.FC<MainPageProps> = ({ onLogout, userName }) => {
             </div>
         </div>
     );
-};
+};    
