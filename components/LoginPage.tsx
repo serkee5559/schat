@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Lock, User, Star } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../constants';
 
 interface LoginPageProps {
   onLogin: (name: string) => void;
