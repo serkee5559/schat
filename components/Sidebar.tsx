@@ -36,7 +36,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ history, isOpen, onClose, onLo
               <div className="w-8 h-8 bg-kb-yellow rounded-lg flex items-center justify-center">
                 <Star size={18} className="text-kb-navy fill-kb-navy" />
               </div>
-              <span className="font-bold tracking-tight text-lg">Smart Star AI</span>
+              <span className="font-bold tracking-tight text-lg">Smart Star AI v0.1</span>
             </div>
             <button onClick={onClose} className="md:hidden text-slate-400 hover:text-white">
               <X size={24} />
