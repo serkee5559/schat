@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { User, Lock, Mail, Star, ArrowLeft, IdCard } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../constants';
 
 export const SignupPage: React.FC = () => {
     const navigate = useNavigate();

@@ -4,6 +4,7 @@ import { Sidebar } from './Sidebar';
 import { ChatWindow } from './ChatWindow';
 import { Message, ChatHistory } from '../types';
 import { generateAIResponse } from '../services/geminiService';
+import { API_BASE_URL } from '../constants';
 
 interface MainPageProps {
     onLogout: () => void;
