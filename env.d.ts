@@ -1,4 +1,5 @@
 interface ImportMetaEnv {
+    readonly VITE_HF_TOKEN: string;
     readonly VITE_API_URL: string;
 }
 
