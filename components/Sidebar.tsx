@@ -45,7 +45,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ history, isOpen, onClose, onLo
 
           {/* Action Button */}
           <div className="p-4">
-            <button className="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-medium py-3 rounded-xl transition-colors border border-slate-700">
+            <button
+              onClick={() => {
+                onNewChat(); // 새로운 채팅 상태로 초기화
+                onClose();   // 사이드바 닫기 (특히 모바일에서 중요)
+              }}
+              className="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-white font-medium py-3 rounded-xl transition-colors border border-slate-700">
               <Plus size={18} />
               새로운 상담 시작
             </button>
