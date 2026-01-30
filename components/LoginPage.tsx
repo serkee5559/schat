@@ -36,7 +36,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
       // 서버에서 "강석희" 또는 "fail" 문자열이 옵니다.
       const result = await response.text();
-
+      console.log("Login Result:", result);
       if (result !== "fail" && result !== "error") {
         // ✅ [중요] localStorage에 이름과 아이디를 모두 저장합니다.
         localStorage.setItem('userName', result);
