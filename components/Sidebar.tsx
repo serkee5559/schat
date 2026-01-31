@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { MessageSquare, Plus, Clock, LogOut, X, Star } from 'lucide-react';
+import { MessageSquare, Plus, Clock, LogOut, X, Star, Trash2 } from 'lucide-react';
 import { ChatHistory } from '../types';
 
 interface SidebarProps {
@@ -11,9 +11,19 @@ interface SidebarProps {
   userName: string;
   onNewChat: () => void;
   onSelectHistory: (history: ChatHistory) => void;
+  onDeleteHistory: (id: string) => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ history, isOpen, onClose, onLogout, userName, onNewChat, onSelectHistory }) => {
+export const Sidebar: React.FC<SidebarProps> = ({
+  history,
+  isOpen,
+  onClose,
+  onLogout,
+  userName,
+  onNewChat,
+  onSelectHistory,
+  onDeleteHistory
+}) => {
   return (
     <>
       {/* Overlay for mobile */}
@@ -65,17 +75,30 @@ export const Sidebar: React.FC<SidebarProps> = ({ history, isOpen, onClose, onLo
               </p>
             </div>
             {history.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => onSelectHistory(item)}
-                className="w-full flex items-start gap-3 px-4 py-3.5 rounded-xl hover:bg-slate-800 transition-colors group text-left"
-              >
-                <MessageSquare size={18} className="mt-1 text-slate-500 group-hover:text-kb-yellow" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate group-hover:text-kb-yellow transition-colors">{item.title}</p>
-                  <p className="text-xs text-slate-500 truncate mt-0.5">{item.lastMessage}</p>
-                </div>
-              </button>
+              <div key={item.id} className="group relative">
+                <button
+                  onClick={() => onSelectHistory(item)}
+                  className="w-full flex items-start gap-3 px-4 py-3.5 rounded-xl hover:bg-slate-800 transition-colors text-left pr-10"
+                >
+                  <MessageSquare size={18} className="mt-1 text-slate-500 group-hover:text-kb-yellow" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium truncate group-hover:text-kb-yellow transition-colors">{item.title}</p>
+                    <p className="text-xs text-slate-500 truncate mt-0.5">{item.lastMessage}</p>
+                  </div>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (window.confirm('이 채팅 내역을 삭제하시겠습니까?')) {
+                      onDeleteHistory(item.id);
+                    }
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-slate-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all rounded-lg hover:bg-red-400/10"
+                  title="삭제"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
             ))}
           </div>
 

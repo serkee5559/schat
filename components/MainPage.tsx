@@ -48,21 +48,41 @@ export const MainPage: React.FC<MainPageProps> = ({ onLogout, userName }) => {
         try {
             setIsSidebarOpen(false);
             setCurrentSessionId(history.id);
+            setIsLoading(true);
 
+            console.log(`불러오는 세션 ID: ${history.id}`);
             const response = await fetch(`${API_BASE_URL}/api/chat/messages/${history.id}`);
+
             if (response.ok) {
-                const fullMessages = await response.json();
-                const formattedMessages = fullMessages.map((msg: any) => ({
-                    id: msg.id,
-                    role: msg.role,
-                    content: msg.content,
-                    timestamp: new Date(msg.createdAt)
+                const data = await response.json();
+                console.log("받은 메시지 데이터:", data);
+
+                // 서버 데이터의 필드명 불일치(대소문자, 언더바 등)를 대비한 로직
+                const formattedMessages = data.map((msg: any) => ({
+                    id: msg.id || Math.random().toString(),
+                    role: msg.role?.toLowerCase() === 'user' ? 'user' : 'assistant',
+                    content: msg.content || '',
+                    timestamp: new Date(msg.createdAt || msg.created_at || Date.now()),
+                    // AI 응답일 경우 suggestions 파싱 시도 (선택 사항)
+                    suggestions: msg.role?.toLowerCase() === 'assistant' ? parseSuggestions(msg.content) : undefined
                 }));
+
                 setMessages(formattedMessages);
+            } else {
+                console.error("서버 데이터 로드 실패:", response.status);
             }
         } catch (error) {
             console.error("대화 내용 로드 실패:", error);
+        } finally {
+            setIsLoading(false);
         }
+    };
+
+    // 간단한 suggestions 파싱 함수 추가
+    const parseSuggestions = (content: string) => {
+        const menuPattern = /(\d+\.\s+[^.\n\d]+)/g;
+        const matches = content.match(menuPattern);
+        return matches ? matches.map(m => m.replace(/^\d+\.\s+/, '').trim()) : undefined;
     };
 
     // 3. [초기화] 새로운 상담 시작
@@ -149,6 +169,30 @@ export const MainPage: React.FC<MainPageProps> = ({ onLogout, userName }) => {
         }
     }, [messages, currentSessionId, storedUserId, fetchHistory]);
 
+    // 5. [삭제] 채팅 히스토리 삭제
+    const handleDeleteHistory = async (id: string) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/api/chat/history/delete/${id}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                // 현재 열려있는 채팅방을 삭제한 경우 화면 초기화
+                if (currentSessionId === id) {
+                    handleNewChat();
+                }
+                // 목록 새로고침
+                fetchHistory();
+            } else {
+                console.error("삭제 실패:", response.status);
+                alert("삭제 중 오류가 발생했습니다.");
+            }
+        } catch (error) {
+            console.error("삭제 요청 오류:", error);
+            alert("서버와 통신 중 오류가 발생했습니다.");
+        }
+    };
+
     return (
         <div className="flex h-screen overflow-hidden bg-kb-bg">
             <Sidebar
@@ -159,6 +203,7 @@ export const MainPage: React.FC<MainPageProps> = ({ onLogout, userName }) => {
                 userName={storedName}
                 onNewChat={handleNewChat}
                 onSelectHistory={handleSelectHistory}
+                onDeleteHistory={handleDeleteHistory}
             />
 
             <div className="flex-1 flex flex-col min-w-0">
